@@ -16,25 +16,46 @@ export const Login = ({ onLogin }: LoginProps) => {
     setError('');
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/auth/login`, {
+      const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+      const response = await fetch(`${baseUrl}/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
       });
 
-      const data = await response.json();
-
       if (!response.ok) {
-        throw new Error(data.message || 'Error en autenticación');
+        let errorMessage = `Error HTTP ${response.status}`;
+        try {
+          const errorJson = (await response.json()) as { message?: string | string[] };
+          if (Array.isArray(errorJson.message)) {
+            errorMessage = errorJson.message.join(', ');
+          } else if (typeof errorJson.message === 'string') {
+            errorMessage = errorJson.message;
+          }
+        } catch {
+          errorMessage = response.statusText || errorMessage;
+        }
+        throw new Error(errorMessage);
       }
+
+      const data = (await response.json()) as {
+        accessToken: string;
+        user?: {
+          id: string;
+          email: string;
+          role?: string;
+          name?: string | null;
+        };
+      };
 
       if (data.user?.role !== 'ADMIN') {
         throw new Error('No tienes permisos de administrador');
       }
 
       onLogin(data.accessToken);
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Error inesperado en autenticación';
+      setError(message);
     } finally {
       setLoading(false);
     }
@@ -46,11 +67,12 @@ export const Login = ({ onLogin }: LoginProps) => {
       
       <div className="relative w-full max-w-md bg-slate-800/50 backdrop-blur-md border border-slate-700/50 rounded-2xl p-8 shadow-2xl">
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-blue-500/20 text-blue-400 mb-4">
-            <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-            </svg>
+          <div className="inline-flex items-center justify-center mb-4">
+            <img 
+              src="/godeyes-brand-logo.png" 
+              alt="GodEyes Logo" 
+              className="w-24 h-24 object-contain drop-shadow-[0_0_15px_rgba(56,189,248,0.4)]"
+            />
           </div>
           <h1 className="text-3xl font-bold text-white tracking-tight">GodEyes</h1>
           <p className="text-slate-400 mt-2">Panel de Administración Central</p>

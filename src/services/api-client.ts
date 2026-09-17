@@ -13,7 +13,7 @@ interface RequestOptions extends RequestInit {
 }
 
 const getBaseUrl = (): string => {
-  return import.meta.env.VITE_API_URL || 'https://god-eyes-backs.onrender.com';
+  return import.meta.env.VITE_API_URL || 'http://localhost:3000';
 };
 
 export const apiClient = {
@@ -62,6 +62,71 @@ export const apiClient = {
       method: 'POST',
       headers,
       body: JSON.stringify(body),
+    });
+
+    if (!response.ok) {
+      let errorMessage = `HTTP Error ${response.status}`;
+      try {
+        const errorData = (await response.json()) as { message?: string | string[] };
+        if (Array.isArray(errorData.message)) {
+          errorMessage = errorData.message.join(', ');
+        } else if (typeof errorData.message === 'string') {
+          errorMessage = errorData.message;
+        }
+      } catch {
+        errorMessage = response.statusText || errorMessage;
+      }
+      throw new ApiError(errorMessage, response.status);
+    }
+
+    return response.json() as Promise<T>;
+  },
+
+  async put<T, B = unknown>(endpoint: string, body: B, options: RequestOptions = {}): Promise<T> {
+    const token = options.token ?? localStorage.getItem('admin_token');
+    const headers: Record<string, string> = {
+      'Content-Type': 'application/json',
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      ...(options.headers as Record<string, string> | undefined),
+    };
+
+    const response = await fetch(`${getBaseUrl()}${endpoint}`, {
+      ...options,
+      method: 'PUT',
+      headers,
+      body: JSON.stringify(body),
+    });
+
+    if (!response.ok) {
+      let errorMessage = `HTTP Error ${response.status}`;
+      try {
+        const errorData = (await response.json()) as { message?: string | string[] };
+        if (Array.isArray(errorData.message)) {
+          errorMessage = errorData.message.join(', ');
+        } else if (typeof errorData.message === 'string') {
+          errorMessage = errorData.message;
+        }
+      } catch {
+        errorMessage = response.statusText || errorMessage;
+      }
+      throw new ApiError(errorMessage, response.status);
+    }
+
+    return response.json() as Promise<T>;
+  },
+
+  async delete<T>(endpoint: string, options: RequestOptions = {}): Promise<T> {
+    const token = options.token ?? localStorage.getItem('admin_token');
+    const headers: Record<string, string> = {
+      'Content-Type': 'application/json',
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      ...(options.headers as Record<string, string> | undefined),
+    };
+
+    const response = await fetch(`${getBaseUrl()}${endpoint}`, {
+      ...options,
+      method: 'DELETE',
+      headers,
     });
 
     if (!response.ok) {

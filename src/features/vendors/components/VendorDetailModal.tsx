@@ -47,13 +47,13 @@ export const VendorDetailModal = ({ vendorId, token, onClose }: VendorDetailModa
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
       <div 
-        className="relative w-full max-w-4xl max-h-[90vh] bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl flex flex-col overflow-hidden text-slate-200"
+        className="relative w-full max-w-4xl max-h-[90vh] bg-slate-900 border border-slate-800 rounded-lg shadow-2xl flex flex-col overflow-hidden text-slate-200"
         role="dialog"
         aria-modal="true"
       >
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-800 bg-slate-900/80">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-blue-500/20 text-blue-400 flex items-center justify-center font-bold text-lg border border-blue-500/30">
+            <div className="w-10 h-10 rounded-md bg-blue-500/20 text-blue-400 flex items-center justify-center font-bold text-lg border border-blue-500/30">
               {detail?.name ? detail.name.charAt(0).toUpperCase() : 'V'}
             </div>
             <div>
@@ -146,7 +146,7 @@ export const VendorDetailModal = ({ vendorId, token, onClose }: VendorDetailModa
                       </div>
                       <div>
                         <span className="text-xs text-slate-500 block">Tipo de Vendedor</span>
-                        <span className="inline-flex items-center px-2.5 py-0.5 mt-1 rounded-full text-xs font-medium bg-blue-500/10 text-blue-400 border border-blue-500/20">
+                        <span className="inline-flex items-center px-2.5 py-0.5 mt-1 rounded-md text-xs font-medium bg-blue-500/10 text-blue-400 border border-blue-500/20">
                           {detail.vendorType || 'No categorizado'}
                         </span>
                       </div>
@@ -201,7 +201,7 @@ export const VendorDetailModal = ({ vendorId, token, onClose }: VendorDetailModa
                         </div>
                         <div>
                           <span className="text-xs text-slate-500 block">Estado</span>
-                          <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${
+                          <span className={`inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium ${
                             detail.device.status === 'online'
                               ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
                               : 'bg-slate-800 text-slate-400'
@@ -254,7 +254,7 @@ export const VendorDetailModal = ({ vendorId, token, onClose }: VendorDetailModa
                             )}
                             <div className="flex items-start justify-between gap-2">
                               <h4 className="font-semibold text-white text-sm">{product.name}</h4>
-                              <span className={`text-[10px] px-2 py-0.5 rounded-full font-medium ${
+                              <span className={`text-[10px] px-2 py-0.5 rounded-md font-medium ${
                                 product.isAvailable
                                   ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
                                   : 'bg-red-500/10 text-red-400 border border-red-500/20'
@@ -273,7 +273,7 @@ export const VendorDetailModal = ({ vendorId, token, onClose }: VendorDetailModa
                           </div>
                           <div className="mt-4 pt-3 border-t border-slate-800/80 flex items-center justify-between">
                             <span className="text-xs text-slate-500">Precio Unitario</span>
-                            <span className="text-base font-bold text-emerald-400">${product.price.toFixed(2)}</span>
+                            <span className="text-base font-bold text-emerald-400 font-mono">S/ {product.price.toFixed(2)}</span>
                           </div>
                         </div>
                       ))}
@@ -293,11 +293,11 @@ export const VendorDetailModal = ({ vendorId, token, onClose }: VendorDetailModa
                       {detail.promotions.map((promo) => (
                         <div
                           key={promo.id}
-                          className="bg-slate-950/60 border border-slate-800 rounded-xl p-5 relative overflow-hidden"
+                          className="bg-slate-950/60 border border-slate-800 rounded-lg p-5 relative overflow-hidden"
                         >
                           <div className="flex items-center justify-between mb-2">
                             <h4 className="font-bold text-white text-base">{promo.title}</h4>
-                            <span className={`text-xs px-2.5 py-0.5 rounded-full font-medium ${
+                            <span className={`text-xs px-2.5 py-0.5 rounded-md font-medium ${
                               promo.isActive
                                 ? 'bg-blue-500/10 text-blue-400 border border-blue-500/20'
                                 : 'bg-slate-800 text-slate-500'
@@ -306,12 +306,12 @@ export const VendorDetailModal = ({ vendorId, token, onClose }: VendorDetailModa
                             </span>
                           </div>
                           <p className="text-xs text-slate-400 mb-4">{promo.description}</p>
-                          <div className="flex items-center gap-4 text-sm font-semibold">
+                          <div className="flex items-center gap-4 text-sm font-semibold font-mono">
                             {promo.discountPercent && (
                               <span className="text-amber-400">-{promo.discountPercent}% OFF</span>
                             )}
                             {promo.promoPrice && (
-                              <span className="text-emerald-400">${promo.promoPrice.toFixed(2)}</span>
+                              <span className="text-emerald-400">S/ {promo.promoPrice.toFixed(2)}</span>
                             )}
                           </div>
                         </div>
@@ -347,8 +347,8 @@ export const VendorDetailModal = ({ vendorId, token, onClose }: VendorDetailModa
                               </td>
                               <td className="p-3 text-white font-medium">{sale.productName}</td>
                               <td className="p-3 text-slate-300">{sale.quantity}</td>
-                              <td className="p-3 text-slate-400">${sale.unitPrice.toFixed(2)}</td>
-                              <td className="p-3 font-bold text-emerald-400">${sale.totalAmount.toFixed(2)}</td>
+                              <td className="p-3 text-slate-400 font-mono">S/ {sale.unitPrice.toFixed(2)}</td>
+                              <td className="p-3 font-bold text-emerald-400 font-mono">S/ {sale.totalAmount.toFixed(2)}</td>
                             </tr>
                           ))}
                         </tbody>

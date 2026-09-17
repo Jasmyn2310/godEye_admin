@@ -76,25 +76,25 @@ export const VendorList = ({ token }: VendorListProps) => {
       </header>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-sm relative overflow-hidden">
+        <div className="bg-slate-900 border border-slate-800 rounded-lg p-6 shadow-sm relative overflow-hidden">
           <p className="text-slate-400 text-sm font-medium mb-1">Comercios Totales</p>
           <p className="text-3xl font-bold text-white">{summaryStats.totalVendors}</p>
         </div>
 
-        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-sm relative overflow-hidden">
+        <div className="bg-slate-900 border border-slate-800 rounded-lg p-6 shadow-sm relative overflow-hidden">
           <p className="text-slate-400 text-sm font-medium mb-1">Catálogo Global de Productos</p>
           <p className="text-3xl font-bold text-white">{summaryStats.totalProducts}</p>
         </div>
 
-        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-sm relative overflow-hidden">
+        <div className="bg-slate-900 border border-slate-800 rounded-lg p-6 shadow-sm relative overflow-hidden">
           <p className="text-slate-400 text-sm font-medium mb-1">Volumen de Ventas Declaradas</p>
-          <p className="text-3xl font-bold text-emerald-400">
-            ${summaryStats.totalSalesVolume.toLocaleString('es-PE', { minimumFractionDigits: 2 })}
+          <p className="text-3xl font-bold text-emerald-400 font-mono">
+            S/ {summaryStats.totalSalesVolume.toLocaleString('es-PE', { minimumFractionDigits: 2 })}
           </p>
         </div>
       </div>
 
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-6">
+      <div className="bg-slate-900 border border-slate-800 rounded-lg p-6 space-y-6">
         <div className="flex flex-col md:flex-row gap-4 justify-between items-center">
           <div className="relative w-full md:w-96">
             <svg
@@ -176,7 +176,7 @@ export const VendorList = ({ token }: VendorListProps) => {
                   <tr key={vendor.id} className="hover:bg-slate-800/30 transition-colors">
                     <td className="p-4">
                       <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-xl bg-blue-500/10 text-blue-400 flex items-center justify-center font-bold text-sm border border-blue-500/20 shrink-0">
+                        <div className="w-10 h-10 rounded-md bg-blue-500/10 text-blue-400 flex items-center justify-center font-bold text-sm border border-blue-500/20 shrink-0">
                           {vendor.name ? vendor.name.charAt(0).toUpperCase() : 'V'}
                         </div>
                         <div>
@@ -190,7 +190,7 @@ export const VendorList = ({ token }: VendorListProps) => {
 
                     <td className="p-4">
                       <div className="space-y-1">
-                        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-500/10 text-blue-400 border border-blue-500/20">
+                        <span className="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium bg-blue-500/10 text-blue-400 border border-blue-500/20">
                           {vendor.vendorType || 'Comercio'}
                         </span>
                         {vendor.priceRange && (
@@ -211,15 +211,15 @@ export const VendorList = ({ token }: VendorListProps) => {
                     </td>
 
                     <td className="p-4">
-                      <span className="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-800 text-slate-300">
+                      <span className="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-semibold bg-slate-800 text-slate-300">
                         {vendor.totalProducts} items
                       </span>
                     </td>
 
                     <td className="p-4">
                       <div>
-                        <p className="font-semibold text-emerald-400 text-xs">
-                          ${vendor.totalRevenue.toFixed(2)}
+                        <p className="font-semibold text-emerald-400 text-xs font-mono">
+                          S/ {Number(vendor.totalRevenue).toFixed(2)}
                         </p>
                         <p className="text-[11px] text-slate-500">{vendor.totalSalesCount} órdenes</p>
                       </div>
@@ -232,12 +232,9 @@ export const VendorList = ({ token }: VendorListProps) => {
                     <td className="p-4 text-right">
                       <button
                         onClick={() => setSelectedVendorId(vendor.id)}
-                        className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-600/10 hover:bg-blue-600/20 text-blue-400 hover:text-blue-300 rounded-lg text-xs font-medium border border-blue-500/20 transition-colors"
+                        className="px-3 py-1.5 bg-blue-600/10 hover:bg-blue-600/20 text-blue-400 hover:text-blue-300 rounded-md text-xs font-medium border border-blue-500/20 transition-colors"
                       >
-                        <span>Inspeccionar</span>
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
-                        </svg>
+                        Inspeccionar
                       </button>
                     </td>
                   </tr>
