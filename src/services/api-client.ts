@@ -13,7 +13,7 @@ interface RequestOptions extends RequestInit {
 }
 
 const getBaseUrl = (): string => {
-  return import.meta.env.VITE_API_URL || 'http://localhost:3000';
+  return import.meta.env.VITE_API_URL || 'https://god-eyes-backs.onrender.com';
 };
 
 export const apiClient = {
